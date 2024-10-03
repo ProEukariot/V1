@@ -1,0 +1,77 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply transition-all;
+  }
+
+  body,
+  html {
+    @apply bg-lightLilac text-black font-['Poppins'] cursor-none;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply w-fit;
+  }
+}
+
+a {
+  cursor: none;
+}
+
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.border-gradient {
+  background-image: conic-gradient(from var(--angle), transparent 50%, #7091e6);
+  animation: rotate 2.5s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    --angle: 0deg;
+  }
+  to {
+    --angle: 360deg;
+  }
+}
+
+.focus {
+  @apply mix-blend-difference;
+}
+
+::selection {
+  @apply bg-skyBlue text-lightLilac;
+}
+
+::-webkit-scrollbar {
+  @apply w-1;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-skyBlue;
+}
+
+.focus-list:hover > *:not(:hover) {
+  opacity: 0.65;
+}
+
+.overlay-wrapper:hover .overlay {
+  @apply opacity-20 backdrop-blur-lg bg-palePeriwinkle border-softLavender shadow-md;
+}
