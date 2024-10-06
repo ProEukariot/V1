@@ -24,48 +24,35 @@
   }
 }
 
-a {
+a,
+button,
+input {
   cursor: none;
 }
 
-@property --angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
-
-.border-gradient {
-  background-image: conic-gradient(from var(--angle), transparent 50%, #7091e6);
-  animation: rotate 2.5s linear infinite;
-}
-
-@keyframes rotate {
-  from {
-    --angle: 0deg;
-  }
-  to {
-    --angle: 360deg;
-  }
+a:hover > * {
+  @apply text-skyBlue;
 }
 
 .focus {
   @apply mix-blend-difference;
 }
 
+html {
+  scrollbar-width: none;
+}
+
+body {
+  -ms-overflow-style: none;
+}
+
+body::-webkit-scrollbar,
+body::-webkit-scrollbar-button {
+  display: none;
+}
+
 ::selection {
   @apply bg-skyBlue text-lightLilac;
-}
-
-::-webkit-scrollbar {
-  @apply w-1;
-}
-
-::-webkit-scrollbar-track {
-  @apply bg-transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-skyBlue;
 }
 
 .focus-list:hover > *:not(:hover) {
@@ -75,3 +62,8 @@ a {
 .overlay-wrapper:hover .overlay {
   @apply opacity-20 backdrop-blur-lg bg-palePeriwinkle border-softLavender shadow-md;
 }
+
+/* {
+  border: 1px solid red;
+  cursor: auto;
+} */
