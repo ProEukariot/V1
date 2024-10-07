@@ -82,12 +82,25 @@ const rotateElement = (e: MouseEvent, element: Element) => {
   const angX = +(offsetX * MAX_ANGLE_X).toFixed(1);
   const angY = +(offsetY * MAX_ANGLE_Y).toFixed(1);
 
-  gsap.to(element, {
-    rotationX: angY,
-    rotationY: angX * -1,
+  // gsap.to(element, {
+  //   rotationX: angY,
+  //   rotationY: angX * -1,
+  //   duration: 0.15,
+  //   ease: "none",
+  // });
+
+  const toRotationX = gsap.quickTo(element, "rotationX", {
     duration: 0.15,
     ease: "none",
   });
+
+  const toRotationY = gsap.quickTo(element, "rotationY", {
+    duration: 0.15,
+    ease: "none",
+  });
+
+  toRotationX(angY);
+  toRotationY(angX * -1);
 };
 
 const resetRotation = (element: Element) => {
