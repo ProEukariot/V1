@@ -7,11 +7,11 @@ const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 let mode: Mode = isDark ? "dark" : "light";
 
 const cursor = document.getElementById("cursor")!;
-const focusables = document.getElementsByClassName("focusable");
-const toRights = document.getElementsByClassName("to-right");
-const fadeIns = document.getElementsByClassName("overlay-wrapper");
-const jumpers = document.getElementsByClassName("jumper");
-const tilts = document.getElementsByClassName("tilt");
+const focusables = document.querySelectorAll(".focusable");
+const toRights = document.querySelectorAll(".to-right");
+const fadeIns = document.querySelectorAll(".overlay-wrapper");
+const jumpers = document.querySelectorAll(".jumper");
+const tilts = document.querySelectorAll(".tilt");
 const theme = document.getElementById("theme")!;
 const switchModeBtn = document.getElementById("switch-mode")!;
 
@@ -29,6 +29,10 @@ gsap.registerPlugin(ScrollTrigger);
 window.onload = () => {
   setTheme(mode);
 
+  animateCursor();
+
+  animateResize();
+
   registerCursorFocusables(focusables);
 
   animateFadeIn(fadeIns);
@@ -40,11 +44,9 @@ window.onload = () => {
   animateTilt(tilts);
 };
 
-document.addEventListener("mousemove", (e) => {
-  animateCursor(e);
-});
+switchModeBtn.addEventListener("click", (e) => {
+  e.preventDefault();
 
-switchModeBtn.addEventListener("click", () => {
   switch (mode) {
     case "dark":
       mode = "light";
@@ -58,16 +60,12 @@ switchModeBtn.addEventListener("click", () => {
 });
 
 window.addEventListener("resize", () => {
-  theme.style.width = `${getWindowDiag() * 2}px`;
+  gsap.to(theme, {
+    width: getWindowDiag() * 2,
+    duration: 0.2,
+    ease: "power3.out",
+  });
 });
-
-const isMobileDevice = () => {
-  return /Mobi|Android/i.test(navigator.userAgent);
-};
-
-if (isMobileDevice()) {
-  if (cursor) cursor.classList.add("hidden");
-}
 
 const rotateElement = (e: MouseEvent, element: Element) => {
   const MAX_ANGLE_X = 30;
@@ -103,67 +101,47 @@ const resetRotation = (element: Element) => {
 
 const setTheme = (mode: Mode) => {
   let rad = getWindowDiag() * 2;
+  const isDark = mode == "dark";
 
-  switch (mode) {
-    case "dark":
-      gsap.to(theme, {
-        width: rad,
-        backgroundColor: "#fff",
-        duration: 0.8,
-        ease: "power3.out",
-      });
+  gsap.to(theme, {
+    width: isDark ? rad : 0,
+    backgroundColor: isDark ? "#fff" : "#000",
+    duration: 0.8,
+    ease: "power3.out",
+  });
 
-      gsap.to(switchModeBtn.children, {
-        rotationX: 90,
-        duration: 0.2,
-        ease: "none",
-      });
+  gsap.to(switchModeBtn.children, {
+    rotationX: isDark ? 90 : 0,
+    duration: 0.2,
+    ease: "none",
+  });
 
-      document.body.classList.add("dark");
-      break;
-    case "light":
-      gsap.to(theme, {
-        width: 0,
-        backgroundColor: "#000",
-        duration: 0.8,
-        ease: "power3.out",
-      });
+  document.body.classList.toggle("dark", isDark);
 
-      gsap.to(switchModeBtn.children, {
-        rotationX: 0,
-        duration: 0.2,
-        ease: "none",
-      });
-
-      document.body.classList.remove("dark");
-      break;
-  }
-
-  switchModeBtn.setAttribute("aria-pressed", String(mode == "dark"));
+  switchModeBtn.setAttribute("aria-pressed", String(isDark));
 };
 
-const animateJump = (elements: HTMLCollectionOf<Element>) => {
-  Array.from(elements).forEach((element) => {
+const animateJump = (elements: NodeListOf<Element>) => {
+  elements.forEach((element) => {
+    const jumpTween = gsap.to(element.children, {
+      y: -25,
+      duration: 0.15,
+      ease: "expo.out",
+      paused: true,
+    });
+
     element.addEventListener("mouseenter", () => {
-      gsap.to(element.children, {
-        y: -25,
-        duration: 0.15,
-        ease: "expo.in",
-      });
+      jumpTween.play();
     });
 
     element.addEventListener("mouseleave", () => {
-      gsap.to(element.children, {
-        y: 0,
-        duration: 0.15,
-        ease: "expo.in",
-      });
+      jumpTween.reverse();
     });
   });
 };
 
-const animateFadeIn = (elements: HTMLCollectionOf<Element>) => {
-  Array.from(elements).forEach((element) => {
+const animateFadeIn = (elements: NodeListOf<Element>) => {
+  elements.forEach((element) => {
     gsap.from(element, {
       x: 80,
       scale: 0.8,
@@ -178,7 +156,7 @@ const animateFadeIn = (elements: HTMLCollectionOf<Element>) => {
   });
 };
 
-const animateDrawToRight = (elements: HTMLCollectionOf<Element>) => {
+const animateDrawToRight = (elements: NodeListOf<Element>) => {
   gsap.from(elements, {
     width: 0,
     duration: 1,
@@ -187,8 +165,8 @@ const animateDrawToRight = (elements: HTMLCollectionOf<Element>) => {
   });
 };
 
-const animateTilt = (elements: HTMLCollectionOf<Element>) => {
-  Array.from(elements).forEach((element) => {
+const animateTilt = (elements: NodeListOf<Element>) => {
+  elements.forEach((element) => {
     element.addEventListener("mousemove", (e) => {
       rotateElement(e as MouseEvent, element);
     });
@@ -199,15 +177,32 @@ const animateTilt = (elements: HTMLCollectionOf<Element>) => {
   });
 };
 
-const animateCursor = (e: MouseEvent) => {
-  gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0 });
+const animateResize = () => {
+  const widthTo = gsap.quickTo(theme, "width", {
+    duration: 0.2,
+    ease: "power3.out",
+  });
+
+  window.addEventListener("resize", () => {
+    widthTo(getWindowDiag() * 2);
+  });
 };
 
-const registerCursorFocusables = (elements: HTMLCollectionOf<Element>) => {
+const animateCursor = () => {
+  const xSetter = gsap.quickSetter(cursor, "x", "px");
+  const ySetter = gsap.quickSetter(cursor, "y", "px");
+
+  window.addEventListener("mousemove", (e) => {
+    xSetter(e.x);
+    ySetter(e.y);
+  });
+};
+
+const registerCursorFocusables = (elements: NodeListOf<Element>) => {
   const tl = gsap.timeline({ paused: true });
   tl.to(cursor, { scale: 2, duration: 0.15, ease: "power2.out" });
 
-  Array.from(elements).forEach((element) => {
+  elements.forEach((element) => {
     element.addEventListener("mouseenter", () => {
       tl.play();
       cursor.classList.add("focus");

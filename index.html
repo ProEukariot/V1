@@ -9,20 +9,21 @@
 
     <script type="module" src="/src/main.ts"></script>
   </head>
-  <body class="overflow-x-hidden">
+  <body>
     <div
       id="cursor"
-      class="hidden fixed origin-center transition-none w-8 h-8 bg-royalBlue rounded-full pointer-events-none z-40 -translate-x-1/2 -translate-y-1/2 md:block"
+      class="block fixed origin-center transition-none w-8 aspect-square bg-royalBlue rounded-full pointer-events-none z-40 -translate-x-1/2 -translate-y-1/2"
     ></div>
     <div
       id="theme"
-      class="fixed rounded-full bg-white mix-blend-difference top-0 right-0 translate-x-1/2 -translate-y-1/2 w-0 aspect-square transition-none pointer-events-none z-50"
+      class="fixed rounded-full bg-black mix-blend-difference top-0 right-0 translate-x-1/2 -translate-y-1/2 w-0 aspect-square transition-none pointer-events-none z-50"
     ></div>
-    <div class="fixed flex bottom-0 right-0 border p-4">
+    <div class="fixed flex bottom-0 right-0 z-30 p-4">
       <button
         id="switch-mode"
+        class="focusable"
         type="button"
-        style="perspective: 800px"
+        style="perspective: 10000px"
         aria-label="switch dark mode"
       >
         <div
@@ -31,7 +32,7 @@
         >
           <div
             style="transform: translateZ(20px)"
-            class="absolute w-full h-full bg-lightLilac"
+            class="absolute w-full h-full"
           >
             <svg
               role="img"
@@ -75,7 +76,7 @@
           </div>
           <div
             style="transform: translateY(20px) rotateX(90deg) rotateZ(90deg)"
-            class="absolute w-full h-full bg-lightLilac"
+            class="absolute w-full h-full"
           >
             <svg
               width="40"
@@ -93,7 +94,9 @@
       </button>
     </div>
 
-    <div class="min-h-screen w-full max-w-screen-xl px-8 mx-auto md:px-32">
+    <div
+      class="overflow-x-clip min-h-screen w-full max-w-screen-xl px-8 mx-auto md:px-32"
+    >
       <div class="flex flex-col min-h-screen gap-4 md:flex-row md:gap-8">
         <div
           class="static flex flex-col justify-between top-0 max-h-screen w-1/2 py-16 md:sticky md:py-24"
@@ -117,6 +120,7 @@
               href="https://www.linkedin.com/in/vitalii-gerzhuk/"
               target="blank"
               ><svg
+                class="transition-none"
                 xmlns="http://www.w3.org/2000/svg"
                 width="40"
                 height="40"
@@ -135,6 +139,7 @@
               href="https://github.com/ProEukariot"
               target="blank"
               ><svg
+                class="transition-none"
                 role="img"
                 xmlns="http://www.w3.org/2000/svg"
                 width="40"
@@ -499,7 +504,7 @@
               aria-label="link to a CV pdf document"
               target="blank"
             >
-              <div class="block">View My Resume</div>
+              <div class="block transition-none">View My Resume</div>
             </a>
           </div>
           <footer>

@@ -9,8 +9,7 @@
     @apply transition-all;
   }
 
-  body,
-  html {
+  body {
     @apply bg-lightLilac text-black font-['Poppins'] cursor-none;
   }
 
@@ -42,10 +41,6 @@ html {
   scrollbar-width: none;
 }
 
-body {
-  -ms-overflow-style: none;
-}
-
 body::-webkit-scrollbar,
 body::-webkit-scrollbar-button {
   display: none;
@@ -63,7 +58,7 @@ body::-webkit-scrollbar-button {
   @apply opacity-20 backdrop-blur-lg bg-palePeriwinkle border-softLavender shadow-md;
 }
 
-/* {
+/* * {
   border: 1px solid red;
   cursor: auto;
 } */
