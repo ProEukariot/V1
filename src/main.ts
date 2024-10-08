@@ -209,6 +209,8 @@ const animateCursor = () => {
     xSetter(e.x);
     ySetter(e.y);
   });
+
+  document.body.classList.add("cursor-none");
 };
 
 const registerCursorFocusables = (elements: NodeListOf<Element>) => {
